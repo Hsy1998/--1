@@ -25,17 +25,16 @@ var server = http.createServer(function (request, response) {
   response.statusCode = 200;
 
   // 用户请求的网址，默认为index.html
-  const x = path === '/' ? '/index.html' : path
+  const filePath = path === '/' ? '/index.html' : path
 
   // 获取网址.的下标
   let index = path.lastIndexOf('.')
 
   // 获取.下标开始的字符串
-  let h = path.substring(index)
-  console.log(h);
+  let suffix = path.substring(index)
 
   // 创建哈希表
-  const fileType = {
+  const fileTypes = {
     '.html': 'text/html',
     '.css': 'text/css',
     '.js': 'text/javascript',
@@ -45,10 +44,10 @@ var server = http.createServer(function (request, response) {
     '.jpg': 'image/jpeg',
     '.png': 'image/png'
   }
-  response.setHeader("Content-Type", `${fileType[h]} || text/html;charset=utf-8`);
+  response.setHeader("Content-Type", `${fileTypes[suffix] || 'text/html'} ;charset=utf-8`);
   let string
   try {
-    string = fs.readFileSync(`./public${x}`)
+    string = fs.readFileSync(`./public${filePath}`)
   } catch (error) {
     string = "请求的文件不存在"
     response.statusCode = 404;
